@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Manipulation Example</title>
+    <script>
+        function changeUrlWithPushState() {
+            const state = { page: "newPage" };
+            const title = "New Page Title";
+            const url = "/new-url";
+            history.pushState(state, title, url);
+        }
+
+        function changeUrlWithReplaceState() {
+            const state = { page: "anotherPage" };
+            const title = "Another Page Title";
+            const url = "/another-url";
+            history.replaceState(state, title, url);
+        }
+
+        window.onpopstate = function(event) {
+            if (event.state) {
+                console.log("State data: ", event.state);
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Change URL Example</h1>
+    <button onclick="changeUrlWithPushState()">Change URL with pushState</button>
+    <button onclick="changeUrlWithReplaceState()">Change URL with replaceState</button>
+</body>
+</html>
