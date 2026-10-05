@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<body>
+<div id="feed">Loading…</div>
+
+<script>
+const RSS = "https://rss.app/feeds/ygkGgfZD7kuTxbbV.xml";
+
+fetch(RSS)
+  .then(r => r.text())
+  .then(xml => {
+    const doc = new DOMParser().parseFromString(xml, "text/xml");
+    const items = [...doc.querySelectorAll("item")];
+
+    document.getElementById("feed").innerHTML = items.map(item => {
+      const title = item.querySelector("title")?.textContent || "";
+      const description = item.querySelector("description")?.textContent || "";
+      const pubDate = item.querySelector("pubDate")?.textContent || "";
+
+      return `
+        <article>
+          <h2>${escapeHtml(title)}</h2>
+          <time>${escapeHtml(pubDate)}</time>
+          <div>${description}</div>
+        </article>
+      `;
+    }).join("");
+  })
+  .catch(e => {
+    document.getElementById("feed").textContent =
+      "Feed error: " + e;
+  });
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+  );
+}
+</script>
+</body>
+</html>
